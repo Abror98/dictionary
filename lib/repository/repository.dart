@@ -5,5 +5,6 @@ import 'package:dictionary/model/model_dic.dart';
 class Repository{
   DatabaseHelper databaseHelper = DatabaseHelper();
 
-  Future<List<Dictionary>> databaseItems() => databaseHelper.getAllUserInfo(DatabaseHelper.tableEn);
+  Future<List<Dictionary>> databaseItemsEn() => databaseHelper.getAllUserInfo(DatabaseHelper.tableEn);
+  Future<List<Dictionary>> databaseItemsUz() => databaseHelper.getAllUserInfo(DatabaseHelper.tableUz);
 }

@@ -59,7 +59,6 @@ class DatabaseHelper {
   Future<List<Dictionary>>  getAllUserInfo(String table) async {
     var dbClient = await database;
     List<Map> list = await dbClient.rawQuery('select *from $table');
-    print("list1 " + list.length.toString());
     List<Dictionary> user = new List();
     for(int i = 0; i < list.length; i++){
       var items = new Dictionary(
@@ -72,6 +71,8 @@ class DatabaseHelper {
     print("listIndex " + user[0].en);
     return user;
   }
+
+
 
 }
 
