@@ -18,18 +18,17 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   TextEditingController editingController = TextEditingController();
   bool en = true;
-  Stream stream;
 
   @override
   initState() {
     super.initState();
-    bloc.getWords();
-    stream = bloc.allUserEn;
+    bloc.getWord(en);
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: Color.fromRGBO(221, 221, 221, 1),
@@ -39,29 +38,33 @@ class _MyHomePageState extends State<MyHomePage> {
               prefixIcon: Icon(Icons.search),
               border: InputBorder.none,
               hintText: "Search-Qidiruv",
-              hintStyle: TextStyle(fontSize: 20.0, color: Colors.white),
+              hintStyle: TextStyle(
+                fontSize: 20.0,
+                color: Colors.white,
+              ),
             ),
           ),
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.wifi),
+              icon: Icon(
+                Icons.wifi,
+                color: Colors.red,
+              ),
               tooltip: 'Setting Icon',
               onPressed: () {
                 if (en == true) {
-                  bloc.getWordsUz();
-                  stream = bloc.allUserUz;
                   en = false;
+                  bloc.getWord(en);
                 } else {
-                  bloc.getWords();
-                  stream = bloc.allUserEn;
                   en = true;
+                  bloc.getWord(en);
                 }
               },
             ),
           ],
         ),
         body: StreamBuilder<List<Dictionary>>(
-            stream: stream,
+            stream: bloc.allUser,
             builder: (context, AsyncSnapshot<List<Dictionary>> snapshot) {
               if (snapshot.hasData) {
                 return ListView.builder(
@@ -70,16 +73,19 @@ class _MyHomePageState extends State<MyHomePage> {
                       return Column(
                         children: [
                           Container(
-                              padding: EdgeInsets.all(8),
-                              child: en
-                                  ? _buildRowEN(snapshot.data[Index])
-                                  : _buildRowUZ(snapshot.data[Index])),
+                            padding: EdgeInsets.all(8),
+                            child: en
+                                ? _buildRowEN(snapshot.data[Index])
+                                : _buildRowUZ(snapshot.data[Index]),
+                          ),
                           Divider()
                         ],
                       );
                     });
               } else if (snapshot.hasError) {
-                return Center(child: Text("error"));
+                return Center(
+                  child: Text("error"),
+                );
               }
               return Center(
                 child: SizedBox(
@@ -97,13 +103,26 @@ class _MyHomePageState extends State<MyHomePage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Expanded(child: Text(dic.en, style: TextStyle(fontSize: 14))),
+        Expanded(
+          child: Text(
+            dic.en,
+            style: TextStyle(
+              fontSize: 14,
+              fontStyle: FontStyle.normal,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
         GestureDetector(
-            onTap: () {
-              bloc.speak(dic.en);
-            },
-            child: Image.asset("assets/images/audio.png",
-                height: 30, width: 30, fit: BoxFit.fill)),
+          onTap: () {
+            bloc.speak(dic.en);
+          },
+          child: Icon(
+            Icons.volume_down,
+            color: Colors.red,
+            size: 32,
+          ),
+        ),
       ],
     );
   }
@@ -112,7 +131,16 @@ class _MyHomePageState extends State<MyHomePage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Expanded(child: Text(dic.uz, style: TextStyle(fontSize: 14))),
+        Expanded(
+          child: Text(
+            dic.uz,
+            style: TextStyle(
+              fontSize: 14,
+              fontStyle: FontStyle.normal,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
       ],
     );
   }

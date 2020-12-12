@@ -4,32 +4,25 @@ import 'package:dictionary/repository/repository.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:tts/tts.dart';
 
-class DicBloc{
+class DicBloc {
   final Repository repository = Repository();
-  final _subjectDicEn = PublishSubject<List<Dictionary>>();
-  final _subjectDicUz = PublishSubject<List<Dictionary>>();
+  final _subjectDic = PublishSubject<List<Dictionary>>();
 
+  Observable<List<Dictionary>> get allUser => _subjectDic.stream;
 
-  getWords() async {
-    List<Dictionary> databaseEn = await repository.databaseItemsEn();
-    print("getWords " + databaseEn.length.toString());
-    _subjectDicEn.sink.add(databaseEn);
+  getWord(bool isEng) async {
+    if (isEng) {
+      List<Dictionary> databaseEn = await repository.databaseItemsEn();
+      _subjectDic.sink.add(databaseEn);
+    } else {
+      List<Dictionary> databaseUz = await repository.databaseItemsUz();
+      _subjectDic.sink.add(databaseUz);
+    }
   }
 
-  getWordsUz() async {
-    List<Dictionary> databaseUz = await repository.databaseItemsUz();
-    _subjectDicUz.sink.add(databaseUz);
+  dispose() {
+    _subjectDic.close();
   }
-
-
-
-  dispose(){
-    _subjectDicEn.close();
-    _subjectDicUz.close();
-  }
-
-  Observable<List<Dictionary>> get allUserEn => _subjectDicEn.stream;
-  Observable<List<Dictionary>> get allUserUz => _subjectDicUz.stream;
 
   speak(String speechText) async {
     Tts.speak(speechText);
