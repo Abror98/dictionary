@@ -72,20 +72,21 @@ class _MyHomePageState extends State<MyHomePage> {
             builder: (context, AsyncSnapshot<List<Dictionary>> snapshot) {
               if (snapshot.hasData) {
                 return ListView.builder(
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (BuildContext ctxt, int Index) {
-                      return Column(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(8),
-                            child: en
-                                ? _buildRowEN(snapshot.data[Index])
-                                : _buildRowUZ(snapshot.data[Index]),
-                          ),
-                          Divider()
-                        ],
-                      );
-                    });
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (BuildContext ctxt, int Index) {
+                    return Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(8),
+                          child: en
+                              ? _buildRowEN(snapshot.data[Index])
+                              : _buildRowUZ(snapshot.data[Index]),
+                        ),
+                        Divider()
+                      ],
+                    );
+                  },
+                );
               } else if (snapshot.hasError) {
                 return Center(
                   child: Text("error"),
