@@ -35,7 +35,11 @@ class _MyHomePageState extends State<MyHomePage> {
           title: TextField(
             controller: editingController,
             decoration: InputDecoration(
-              prefixIcon: Icon(Icons.search),
+              prefixIcon: Icon(
+                Icons.search,
+                size: 24,
+                color: Colors.red,
+              ),
               border: InputBorder.none,
               hintText: "Search-Qidiruv",
               hintStyle: TextStyle(
