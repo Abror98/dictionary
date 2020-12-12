@@ -6,7 +6,6 @@ void main() {
   runApp(MyHomePage());
 }
 
-
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
@@ -21,26 +20,19 @@ class _MyHomePageState extends State<MyHomePage> {
   bool en = true;
   Stream stream;
 
-
   @override
-  initState(){
+  initState() {
     super.initState();
     bloc.getWords();
     stream = bloc.allUserEn;
   }
-
-
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: Color.fromRGBO(221,221,221, 1),
-          leading: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Image.asset("assets/images/appbar_icon.png"),
-          ),
+          backgroundColor: Color.fromRGBO(221, 221, 221, 1),
           title: TextField(
             controller: editingController,
             decoration: InputDecoration(
@@ -52,67 +44,56 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.wifi_protected_setup),
+              icon: Icon(Icons.wifi),
               tooltip: 'Setting Icon',
               onPressed: () {
-                  if(en == true) {
-                    bloc.getWordsUz();
-                    stream = bloc.allUserUz;
-                    en = false;
-                    setState(() {
-
-                    });
-                  }
-                else {
-                bloc.getWords();
-                stream = bloc.allUserEn;
-                en = true;
-                setState(() {
-
-                });
+                if (en == true) {
+                  bloc.getWordsUz();
+                  stream = bloc.allUserUz;
+                  en = false;
+                } else {
+                  bloc.getWords();
+                  stream = bloc.allUserEn;
+                  en = true;
                 }
-
               },
             ),
           ],
         ),
         body: StreamBuilder<List<Dictionary>>(
-           stream: stream,
-           builder: (context, AsyncSnapshot<List<Dictionary>> snapshot){
-             if(snapshot.hasData){
-               return ListView.builder(
-                   itemCount: snapshot.data.length,
-                   itemBuilder:(BuildContext ctxt, int Index) {
-                     return Column(
-                       children: [
-                         Container(
-                             padding: EdgeInsets.all(8),
-                             child: en ? _buildRowEN(snapshot.data[Index]) : _buildRowUZ(snapshot.data[Index])),
-                         Divider()
-                       ],
-                     );
-                   }
-               );
-             }
-             else if(snapshot.hasError){
-               return Center(child: Text("error"));
-             }
-             return Center(
-               child: SizedBox(
-                 child: CircularProgressIndicator(),
-                 height: 50.0,
-                 width: 50.0,
-               ),
-             );
-           }
-
-         ),
-
+            stream: stream,
+            builder: (context, AsyncSnapshot<List<Dictionary>> snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (BuildContext ctxt, int Index) {
+                      return Column(
+                        children: [
+                          Container(
+                              padding: EdgeInsets.all(8),
+                              child: en
+                                  ? _buildRowEN(snapshot.data[Index])
+                                  : _buildRowUZ(snapshot.data[Index])),
+                          Divider()
+                        ],
+                      );
+                    });
+              } else if (snapshot.hasError) {
+                return Center(child: Text("error"));
+              }
+              return Center(
+                child: SizedBox(
+                  child: CircularProgressIndicator(),
+                  height: 50.0,
+                  width: 50.0,
+                ),
+              );
+            }),
       ),
     );
   }
 
-  Widget _buildRowEN(Dictionary dic){
+  Widget _buildRowEN(Dictionary dic) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -135,8 +116,4 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
   }
-
-
 }
-
-
